@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#9cc58a" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#17221a" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
+<script src="config.js"></script>
 <link rel="icon" type="image/png" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -34,6 +35,7 @@
     --accent-ink: #ffffff;
     --shadow: rgba(31, 50, 32, .22);
     --focus: #1a4a1f;
+    --danger: #a33b2e;
     box-sizing: border-box;
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -55,6 +57,7 @@
       --accent-ink: #12200f;
       --shadow: rgba(0, 0, 0, .45);
       --focus: #b9f0b4;
+      --danger: #ff9d90;
     }
   }
   :root[data-theme="dark"] {
@@ -73,6 +76,7 @@
     --accent-ink: #12200f;
     --shadow: rgba(0, 0, 0, .45);
     --focus: #b9f0b4;
+      --danger: #ff9d90;
   }
   html { scroll-padding-top: env(safe-area-inset-top, 0px); }
   *, *::before, *::after { box-sizing: border-box; }
@@ -123,7 +127,7 @@
     .clock-card { order: 1; }
     .note-wrap { order: 2; }
     .diary { order: 3; }
-    .list-btn { order: 4; }
+    .btn-row { order: 4; }
   }
 
 
@@ -236,7 +240,7 @@
   .todo-foot svg { width: 30px; height: 30px; flex: none; }
   .todo-foot .done-msg { font-weight: 700; font-size: 1.1rem; }
 
-  .list-btn { align-self: center; }
+  .btn-row { align-self: center; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
 
   /* ---------- sub pages ---------- */
   .bar { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; margin-bottom: 22px; }
@@ -331,6 +335,63 @@
     font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .8rem;
   }
 
+  /* ---------- timeline ---------- */
+  .field {
+    display: block; width: 100%;
+    padding: .5rem .75rem;
+    border: 2px solid var(--paper-ink); border-radius: 10px;
+    background: transparent; color: var(--paper-ink);
+  }
+  .field::placeholder { color: var(--paper-soft); opacity: .8; }
+  .gate, .composer {
+    background: var(--paper); color: var(--paper-ink);
+    border: 2px solid var(--paper-ink); border-radius: 20px;
+    padding: 18px 20px 20px;
+    box-shadow: 0 8px 18px -8px var(--shadow);
+  }
+  .gate { max-width: 460px; margin: 0 auto; }
+  .gate h2, .composer h2 { font-size: 1.05rem; margin-bottom: 6px; }
+  .gate p, .composer .hint { margin: 0 0 12px; font-size: .88rem; color: var(--paper-soft); }
+  .gate .btn { margin-top: 12px; }
+  .form-err { margin: 8px 0 0; min-height: 1.4em; font-size: .88rem; font-weight: 700; color: var(--danger); }
+  .composer .row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .composer .row .field { max-width: 15rem; }
+  .composer textarea.field { min-height: 6.5rem; resize: vertical; line-height: 1.6; }
+  .composer .foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; }
+  .composer .count { font-size: .85rem; color: var(--paper-soft); }
+  .composer .btn { padding-block: .4rem; }
+  .composer .btn:disabled { opacity: .6; cursor: default; }
+  .feed {
+    margin-top: 20px;
+    background: var(--paper); color: var(--paper-ink);
+    border: 2px solid var(--paper-ink); border-radius: 20px; overflow: hidden;
+  }
+  .post { display: flex; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--paper-line); }
+  .post:last-child { border-bottom: 0; }
+  .avatar {
+    flex: none; width: 40px; height: 40px; border-radius: 50%;
+    display: grid; place-items: center;
+    font-weight: 700; color: #1f3220; border: 2px solid var(--paper-ink);
+  }
+  .avatar.c0 { background: #ffd93b; } .avatar.c1 { background: #f4a6a0; } .avatar.c2 { background: #a9d6f5; }
+  .avatar.c3 { background: #c9b6f0; } .avatar.c4 { background: #9cc58a; }
+  .post-main { flex: 1; min-width: 0; }
+  .post-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .post-name { overflow-wrap: anywhere; }
+  .post-head time { font-size: .82rem; color: var(--paper-soft); }
+  .tl-del {
+    margin-left: auto; font-size: .82rem; font-weight: 700;
+    background: none; border: 0; padding: .1rem .4rem; border-radius: 6px;
+    color: var(--paper-soft);
+  }
+  .tl-del:hover, .tl-del.armed { color: var(--danger); }
+  .post-body { margin-top: 2px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .tl-note { text-align: center; margin: 18px 0; }
+  .tl-more { display: flex; justify-content: center; margin-top: 16px; }
+  .tl-foot { margin-top: 26px; text-align: center; font-size: .85rem; }
+  .tl-foot button { background: none; border: 0; text-decoration: underline; color: var(--ink); padding: .3rem; }
+  .icon-btn:disabled { opacity: .55; cursor: default; }
+
   .toast {
     position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px));
     transform: translate(-50%, 20px);
@@ -370,6 +431,8 @@
     left: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
     right: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>',
     list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>',
+    refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg>',
+    people: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c.6-3.4 3-5 6-5s5.4 1.6 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.2c2.4 0 4.1 1.3 4.5 4.3"/></svg>',
     x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     check: '<svg viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
   };
@@ -718,7 +781,8 @@
             '<ul id="todo-list"></ul>' +
             '<div class="todo-foot" id="todo-foot"></div>' +
           '</section></div>' +
-          '<button class="btn list-btn" id="btn-list" type="button">' + ICON.list + '日記一覧</button>' +
+          '<div class="btn-row"><button class="btn" id="btn-list" type="button">' + ICON.list + '日記一覧</button>' +
+          '<button class="btn" id="btn-tl" type="button">' + ICON.people + 'みんなの日記</button></div>' +
         '</div>' +
       '</div>' +
       backupHTML();
@@ -727,6 +791,7 @@
     renderTodo();
     bindBackup();
     tick();
+    $('#btn-tl').addEventListener('click', function () { go({ name: 'timeline' }); });
     $('#btn-list').addEventListener('click', function () {
       var d = new Date();
       go({ name: 'months', year: d.getFullYear() });
@@ -824,14 +889,285 @@
     if (view.name === 'home') renderHome();
     else if (view.name === 'months') renderMonths();
     else if (view.name === 'days') renderDays();
+    else if (view.name === 'timeline') renderTimeline();
     else renderEntry();
+  }
+
+
+  /* ---------- みんなの日記 (shared timeline via Supabase RPC) ---------- */
+  var TL_KEY = 'hibi-note:timeline';
+  var TL_PAGE = 30;
+  var tl = { pass: '', name: '', key: '', posts: [], hasMore: false, loading: false, loaded: false, draft: '' };
+
+  function randomKey() {
+    var a = new Uint8Array(16);
+    try { (window.crypto || window.msCrypto).getRandomValues(a); }
+    catch (e) { for (var i = 0; i < a.length; i++) a[i] = Math.floor(Math.random() * 256); }
+    return Array.prototype.map.call(a, function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+  }
+  function tlSave() {
+    try { localStorage.setItem(TL_KEY, JSON.stringify({ pass: tl.pass, name: tl.name, key: tl.key })); } catch (e) { /* ignore */ }
+  }
+  function tlLoad() {
+    try {
+      var raw = localStorage.getItem(TL_KEY);
+      if (raw) { var p = JSON.parse(raw); tl.pass = p.pass || ''; tl.name = p.name || ''; tl.key = p.key || ''; }
+    } catch (e) { /* ignore */ }
+    if (!tl.key) { tl.key = randomKey(); tlSave(); }
+  }
+  function tlConfig() {
+    var c = window.HIBI_CONFIG || {};
+    var u = String(c.supabaseUrl || '').trim(), k = String(c.supabaseKey || '').trim();
+    if (!u || !k) return null;
+    return { url: u.replace(/\/+$/, ''), key: k };
+  }
+
+  async function rpc(fn, args) {
+    var cfg = tlConfig();
+    if (!cfg) return { ok: false, error: 'not_configured' };
+    var headers = { 'Content-Type': 'application/json', 'apikey': cfg.key };
+    if (/^eyJ/.test(cfg.key)) headers['Authorization'] = 'Bearer ' + cfg.key; // legacy JWT-style key
+    var res;
+    try { res = await fetch(cfg.url + '/rest/v1/rpc/' + fn, { method: 'POST', headers: headers, body: JSON.stringify(args) }); }
+    catch (e) { return { ok: false, error: 'network' }; }
+    if (!res.ok) return { ok: false, error: 'server' };
+    try { return await res.json(); } catch (e) { return { ok: false, error: 'server' }; }
+  }
+
+  function tlErrText(code) {
+    return ({
+      bad_passphrase: '合言葉が違います。',
+      too_many_attempts: '失敗が続いたため、しばらく待ってからもう一度お試しください。',
+      rate_limited: '短時間に投稿しすぎです。少し待ってください。',
+      invalid_input: 'お名前(20文字まで)と本文(1000文字まで)を入力してください。',
+      network: 'つながりませんでした。通信状況を確認してください。',
+      server: 'サーバーでエラーが起きました。設定(SQLの実行・URL・キー)を確認してください。',
+      not_found: '見つかりませんでした。すでに削除されているかもしれません。'
+    })[code] || 'うまくいきませんでした。もう一度お試しください。';
+  }
+
+  function avatarClass(name) {
+    var h = 0;
+    for (var i = 0; i < name.length; i++) h = (h + name.charCodeAt(i)) % 5;
+    return 'c' + h;
+  }
+  function fmtPostTime(iso) {
+    var d = new Date(iso);
+    if (isNaN(d)) return '';
+    var now = new Date();
+    var hm = pad(d.getHours()) + ':' + pad(d.getMinutes());
+    if (keyOf(d) === keyOf(now)) return '今日 ' + hm;
+    var md = (d.getMonth() + 1) + '/' + d.getDate();
+    return (d.getFullYear() !== now.getFullYear() ? d.getFullYear() + '/' : '') + md + ' ' + hm;
+  }
+
+  function gateHTML() {
+    return '<section class="gate" aria-labelledby="gate-h"><h2 id="gate-h">合言葉を入力</h2>' +
+      '<p>この日記を見たり書いたりするには、合言葉が必要です。入力した合言葉は、この端末に保存されます。</p>' +
+      '<input class="field" id="gate-pass" type="password" autocomplete="off" autocapitalize="off" aria-label="合言葉">' +
+      '<button class="btn primary" id="gate-go" type="button">入る</button>' +
+      '<p class="form-err" id="gate-err" role="alert"></p></section>';
+  }
+
+  function composerHTML() {
+    return '<section class="composer" aria-labelledby="cmp-h"><h2 id="cmp-h">日記を書く</h2>' +
+      '<p class="hint">ここに投稿した内容は、合言葉を知っている全員に見えます。自分用の日記帳(非公開)とは別のものです。</p>' +
+      '<div class="row"><input class="field" id="tl-name" type="text" maxlength="20" placeholder="お名前(20文字まで)" aria-label="お名前" autocomplete="off"></div>' +
+      '<textarea class="field" id="tl-text" maxlength="1000" placeholder="今日はどんな一日でしたか?" aria-label="日記の本文"></textarea>' +
+      '<div class="foot"><span class="count" id="tl-count">0 / 1000</span>' +
+      '<button class="btn primary" id="tl-post" type="button">投稿</button></div>' +
+      '<p class="form-err" id="tl-err" role="alert"></p></section>';
+  }
+
+  function postHTML(p) {
+    var name = String(p.author || '');
+    var initial = Array.from(name)[0] || '?';
+    return '<article class="post" data-id="' + esc(p.id) + '">' +
+      '<div class="avatar ' + avatarClass(name) + '" aria-hidden="true">' + esc(initial) + '</div>' +
+      '<div class="post-main"><div class="post-head"><strong class="post-name">' + esc(name) + '</strong>' +
+      '<time datetime="' + esc(p.created_at) + '">' + fmtPostTime(p.created_at) + '</time>' +
+      (p.mine ? '<button class="tl-del" type="button" aria-label="この投稿を削除">削除</button>' : '') +
+      '</div><div class="post-body">' + esc(p.body) + '</div></div></article>';
+  }
+
+  function renderTlList() {
+    var list = $('#tl-list'), more = $('#tl-more');
+    if (!list) return;
+    if (!tl.loaded) {
+      list.innerHTML = '<p class="tl-note">読み込み中…</p>';
+      more.innerHTML = '';
+    } else if (!tl.posts.length) {
+      list.innerHTML = '<div class="empty" style="margin-top:20px">まだ投稿がありません。最初の1件を書いてみましょう。</div>';
+      more.innerHTML = '';
+    } else {
+      list.innerHTML = '<div class="feed">' + tl.posts.map(postHTML).join('') + '</div>';
+      more.innerHTML = tl.hasMore ? '<div class="tl-more"><button class="btn" id="tl-more-btn" type="button">もっと見る</button></div>' : '';
+    }
+    var rb = $('#tl-refresh');
+    if (rb) rb.disabled = tl.loading;
+  }
+
+  function tlHandleError(code) {
+    if (code === 'bad_passphrase') {
+      tl.pass = ''; tl.loaded = false; tl.posts = []; tlSave();
+      renderTimeline();
+      var ge = $('#gate-err');
+      if (ge) ge.textContent = '合言葉が違うか、変更されています。もう一度入力してください。';
+      return;
+    }
+    toast(tlErrText(code), 3500);
+    var rb = $('#tl-refresh');
+    if (rb) rb.disabled = false;
+    if (!tl.loaded) { tl.loaded = true; renderTlList(); }
+  }
+
+  async function tlFetch(more) {
+    if (tl.loading || !tl.pass) return;
+    tl.loading = true;
+    renderTlList();
+    var before = more && tl.posts.length ? tl.posts[tl.posts.length - 1].created_at : null;
+    var res = await rpc('hn_get_posts', { p_pass: tl.pass, p_key: tl.key, p_before: before, p_limit: TL_PAGE });
+    tl.loading = false;
+    if (!res || !res.ok) { tlHandleError(res && res.error); return; }
+    var got = res.posts || [];
+    if (more) {
+      tl.posts = tl.posts.concat(got);
+      tl.hasMore = got.length === TL_PAGE;
+    } else if (got.length < TL_PAGE) {
+      tl.posts = got;
+      tl.hasMore = false;
+    } else {
+      var ids = {};
+      got.forEach(function (p) { ids[p.id] = 1; });
+      var oldest = Date.parse(got[got.length - 1].created_at);
+      var keep = tl.posts.filter(function (p) { return !ids[p.id] && Date.parse(p.created_at) <= oldest; });
+      tl.posts = got.concat(keep);
+      tl.hasMore = keep.length ? tl.hasMore : true;
+    }
+    tl.loaded = true;
+    if (view.name === 'timeline') renderTlList();
+  }
+
+  async function tlEnter() {
+    var inp = $('#gate-pass'), btn = $('#gate-go'), err = $('#gate-err');
+    var pass = inp.value;
+    if (!pass) { err.textContent = '合言葉を入力してください。'; inp.focus(); return; }
+    btn.disabled = true;
+    err.textContent = '';
+    var res = await rpc('hn_get_posts', { p_pass: pass, p_key: tl.key, p_before: null, p_limit: TL_PAGE });
+    btn.disabled = false;
+    if (!res || !res.ok) { err.textContent = tlErrText(res && res.error); return; }
+    tl.pass = pass; tlSave();
+    tl.posts = res.posts || [];
+    tl.hasMore = tl.posts.length === TL_PAGE;
+    tl.loaded = true;
+    renderTimeline();
+  }
+
+  async function tlPost() {
+    var nameEl = $('#tl-name'), ta = $('#tl-text'), btn = $('#tl-post'), err = $('#tl-err');
+    var name = nameEl.value.trim(), text = ta.value.trim();
+    err.textContent = '';
+    if (!name) { err.textContent = 'お名前を入力してください。'; nameEl.focus(); return; }
+    if (!text) { err.textContent = '本文を入力してください。'; ta.focus(); return; }
+    btn.disabled = true;
+    var res = await rpc('hn_create_post', { p_pass: tl.pass, p_author: name, p_body: text, p_key: tl.key });
+    btn.disabled = false;
+    if (!res || !res.ok) {
+      if (res && res.error === 'bad_passphrase') { tlHandleError('bad_passphrase'); return; }
+      err.textContent = tlErrText(res && res.error);
+      return;
+    }
+    tl.name = name; tlSave();
+    ta.value = ''; tl.draft = '';
+    $('#tl-count').textContent = '0 / 1000';
+    toast('投稿しました');
+    tlFetch(false);
+  }
+
+  async function tlDelete(id) {
+    var res = await rpc('hn_delete_post', { p_pass: tl.pass, p_id: id, p_key: tl.key });
+    if (!res || !res.ok) {
+      if (res && res.error === 'bad_passphrase') { tlHandleError('bad_passphrase'); return; }
+      toast(tlErrText(res && res.error), 3500);
+      return;
+    }
+    tl.posts = tl.posts.filter(function (p) { return p.id !== id; });
+    renderTlList();
+    toast('削除しました');
+  }
+
+  function renderTimeline() {
+    var ready = !!tlConfig();
+    var authed = ready && !!tl.pass;
+    var extra = authed ? '<button class="icon-btn" id="tl-refresh" type="button" aria-label="最新の状態に更新">' + ICON.refresh + '</button>' : '';
+    var body;
+    if (!ready) {
+      body = '<div class="empty">まだ「みんなの日記」の接続先が設定されていません。<br>README の手順に沿って、<code>config.js</code> に Supabase の URL とキーを入力してください。</div>';
+    } else if (!authed) {
+      body = gateHTML();
+    } else {
+      body = composerHTML() + '<div id="tl-list"></div><div id="tl-more"></div>' +
+        '<p class="tl-foot"><button id="tl-relogin" type="button">合言葉を入れ直す</button></p>';
+    }
+    $app.innerHTML = barHTML('みんなの日記', 'ホーム', extra) + body;
+    $('#btn-back').addEventListener('click', function () { go({ name: 'home' }); });
+    if (!ready) return;
+
+    if (!authed) {
+      var inp = $('#gate-pass');
+      $('#gate-go').addEventListener('click', tlEnter);
+      inp.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); tlEnter(); }
+      });
+      return;
+    }
+
+    var nameEl = $('#tl-name'), ta = $('#tl-text');
+    nameEl.value = tl.name;
+    ta.value = tl.draft;
+    $('#tl-count').textContent = ta.value.length + ' / 1000';
+    ta.addEventListener('input', function () {
+      tl.draft = ta.value;
+      $('#tl-count').textContent = ta.value.length + ' / 1000';
+    });
+    ta.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && !e.isComposing) { e.preventDefault(); tlPost(); }
+    });
+    $('#tl-post').addEventListener('click', tlPost);
+    $('#tl-refresh').addEventListener('click', function () { tlFetch(false); });
+    $('#tl-relogin').addEventListener('click', function () {
+      tl.pass = ''; tl.loaded = false; tl.posts = []; tlSave();
+      renderTimeline();
+    });
+    $('#tl-more').addEventListener('click', function (e) {
+      if (e.target.closest('#tl-more-btn')) tlFetch(true);
+    });
+    $('#tl-list').addEventListener('click', function (e) {
+      var del = e.target.closest('.tl-del');
+      if (!del) return;
+      var post = del.closest('.post');
+      if (del.classList.contains('armed')) { tlDelete(post.dataset.id); return; }
+      del.classList.add('armed');
+      del.textContent = '本当に削除';
+      setTimeout(function () { if (del.isConnected) { del.classList.remove('armed'); del.textContent = '削除'; } }, 4000);
+    });
+    renderTlList();
+    tlFetch(false);
   }
 
   /* ---------- boot ---------- */
   load();
+  tlLoad();
   render();
   setInterval(tick, 1000);
-  document.addEventListener('visibilitychange', function () { if (document.hidden) commitIfDirty(false); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) commitIfDirty(false);
+    else if (view.name === 'timeline' && tl.pass) tlFetch(false);
+  });
+  setInterval(function () {
+    if (view.name === 'timeline' && tl.pass && !document.hidden) tlFetch(false);
+  }, 30000);
   window.addEventListener('pagehide', function () { commitIfDirty(false); });
 
   // Ask the browser not to evict our data when storage runs low.
